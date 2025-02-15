@@ -55,14 +55,14 @@ app.post("/getSubject", async (req, res) => {
     }
 
     // Step 2: Convert facultyId to ObjectId only if it's a valid MongoDB ObjectId
-    if (!mongoose.Types.ObjectId.isValid(facultyId)) {
-      return res.status(400).json({ msg: "Invalid Faculty ID format" });
-    }
+    // if (!mongoose.Types.ObjectId.isValid(facultyId)) {
+    //   return res.status(400).json({ msg: "Invalid Faculty ID format" });
+    // }
     
-    const facultyObjectId = new mongoose.Types.ObjectId(facultyId);
+    // const facultyObjectId = new mongoose.Types.ObjectId(facultyId);
 
     // Step 3: Fetch subjects from database
-    const subjects = await Subject.find({ faculty: facultyObjectId });
+    const subjects = await Subject.find();
 
     // Step 4: Check if subjects exist
     if (!subjects || subjects.length === 0) {
