@@ -14,7 +14,7 @@ function Login() {
     data.role = role;
 
     axios
-      .post("http://localhost:3000/login", data, { withCredentials: true })
+      .post("https://attendance-management-nine.vercel.app/login", data, { withCredentials: true })
       .then((res) => {
         localStorage.setItem("user", JSON.stringify(res.data.user));
         navigate("/faculty");
