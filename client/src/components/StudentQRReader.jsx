@@ -30,6 +30,12 @@ function StudentQRReader() {
     return () => scanner.clear(); // Cleanup on unmount
   }, []);
 
+  useEffect(() => {
+    const studentId = localStorage.getItem("user");
+    alert(scanResult);
+    alert(studentId);
+  }, [scanResult])
+
   return (
     <div>
       <h3>Scan QR Code</h3>
