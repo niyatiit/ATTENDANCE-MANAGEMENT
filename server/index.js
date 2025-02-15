@@ -5,7 +5,7 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const qrcode = require("qrcode");
-const { v4: uuidv4 } = require("uuid");
+
 
 const connectDB = require('./config/db');
 const Student = require("./model/student.model");
@@ -29,23 +29,7 @@ app.get("/", (req, res) => {
 });
 
 // ✅ Generate QR Code
-app.post("/generate-qr", async (req, res) => {
-  try {
-    const { facultyId } = req.body;
-    if (!facultyId) return res.status(400).json({ error: "Faculty ID is required" });
 
-    const sessionId = uuidv4();
-    const payload = { sessionId, timestamp: Date.now() };
-
-    qrcode.toDataURL(JSON.stringify(payload), (err, url) => {
-      if (err) return res.status(500).json({ error: "Error generating QR" });
-      res.json({ qrCode: url, sessionId });
-    });
-  } catch (error) {
-    console.error("QR Code Generation Error:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
 
 // ✅ Fetch Subjects
 app.post("/getSubject", async (req, res) => {
