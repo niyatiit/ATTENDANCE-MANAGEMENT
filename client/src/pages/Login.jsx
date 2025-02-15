@@ -17,6 +17,7 @@ function Login() {
       .post("https://attendance-management-nine.vercel.app/login", data, { withCredentials: true })
       .then((res) => {
         localStorage.setItem("user", JSON.stringify(res.data.user));
+        const user = JSON.parse(localStorage.getItem("user"));
         if ('facultyId' in user) {
           navigate("/faculty");
         } else {
