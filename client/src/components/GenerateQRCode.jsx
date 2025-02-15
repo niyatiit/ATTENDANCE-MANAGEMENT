@@ -8,12 +8,12 @@ function GenerateQRCode() {
   // Todo: Faculty authentication
 const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-  const [qrValue, setQrValue] = useState(
-    JSON.stringify({
-      facultyId: user?._id || "N/A", // Use user._id properly
-      date: new Date().toISOString(),
-    })
-  );
+  const value = {
+    "facultyId": user?._id || "Nahi hai",
+    "date": new Date().toISOString(),
+  }
+
+  const [qrValue, setQrValue] = useState(JSON.stringify(value));
 
   useEffect(() => {
     const interval = setInterval(() => {
