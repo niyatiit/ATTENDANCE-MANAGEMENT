@@ -1,0 +1,114 @@
+// Backend - server.js
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const qrcode = require("qrcode");
+const { v4: uuidv4 } = require("uuid");
+const app = express();
+app.use(express.json());
+app.use(cors());
+
+// Database Connection
+mongoose.connect("mongodb://localhost:27017/attendance", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+// Models
+const UserSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  password: String,
+  role: String,
+});
+const AttendanceSchema = new mongoose.Schema({
+  studentId: mongoose.Schema.Types.ObjectId,
+  facultyId: mongoose.Schema.Types.ObjectId,
+  sessionId: String,
+  timestamp: { type: Date, default: Date.now },
+});
+const User = mongoose.model("User", UserSchema);
+const Attendance = mongoose.model("Attendance", AttendanceSchema);
+
+// Faculty: Generate QR
+app.post("/generate-qr", async (req, res) => {
+  const { facultyId } = req.body;
+  const sessionId = uuidv4();
+  const payload = { sessionId, timestamp: Date.now() };
+  qrcode.toDataURL(JSON.stringify(payload), (err, url) => {
+    if (err) return res.status(500).send({ error: "Error generating QR" });
+    res.send({ qrCode: url, sessionId });
+  });
+});
+
+// Student: Scan QR & Mark Attendance
+app.post("/mark-attendance", async (req, res) => {
+  const { studentId, qrData } = req.body;
+  const { sessionId, timestamp } = JSON.parse(qrData);
+  if (Date.now() - timestamp > 30000) {
+    return res.status(400).send({ error: "QR code expired" });
+  }
+  const attendance = new Attendance({ studentId, sessionId });
+  await attendance.save();
+  res.send({ message: "Attendance marked successfully" });
+});
+
+// User Authentication
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (!user || !(await bcrypt.compare(password, user.password))) {
+    return res.status(400).send({ error: "Invalid credentials" });
+  }
+  const token = jwt.sign({ id: user._id, role: user.role }, "secretkey");
+  res.send({ token, role: user.role });
+});
+
+app.listen(5000, () => console.log("Server running on port 5000"));
+
+// Frontend - FacultyDashboard.jsx
+import { useState } from "react";
+import axios from "axios";
+export default function FacultyDashboard() {
+  const [qrCode, setQrCode] = useState("");
+  const generateQR = async () => {
+    const response = await axios.post("http://localhost:5000/generate-qr", {
+      facultyId: "FACULTY_ID",
+    });
+    setQrCode(response.data.qrCode);
+  };
+  return (
+    <div>
+      <h1>Faculty Dashboard</h1>
+      <button onClick={generateQR}>Generate QR Code</button>
+      {qrCode && <img src={qrCode} alt="QR Code" />}
+    </div>
+  );
+}
+
+// Frontend - StudentScanner.jsx
+import { useState } from "react";
+import { QrReader } from "react-qr-reader";
+import axios from "axios";
+export default function StudentScanner() {
+  const [result, setResult] = useState("");
+  const handleScan = async (data) => {
+    if (data) {
+      setResult(data);
+      await axios.post("http://localhost:5000/mark-attendance", {
+        studentId: "STUDENT_ID",
+        qrData: data,
+      });
+      alert("Attendance Marked!");
+    }
+  };
+  return (
+    <div>
+      <h1>Student Scanner</h1>
+      <QrReader onResult={(result, error) => result && handleScan(result.text)} />
+      {result && <p>QR Scanned: {result}</p>}
+    </div>
+  );
+}
