@@ -37,6 +37,17 @@ app.post("/generate-qr", async (req, res) => {
   });
 });
 
+app.post("/getSubject", async (req, res) => {
+  const { facultyId } = req.body;
+  const subjects  = await Subject.find({faculty : facultyId});
+
+  if(subjects.length === 0)
+  {
+    return  res.status(404).json({msg : "No subject found"});
+  }
+ return res.status(200).json(subjects);
+});
+
 app.post("/mark-attendance", async (req, res) => {
   const { studentId, qrData } = req.body;
   const { facultyId, refreshedAt } = JSON.parse(qrData);
