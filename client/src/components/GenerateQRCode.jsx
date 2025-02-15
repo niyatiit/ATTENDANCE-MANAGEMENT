@@ -17,7 +17,6 @@ const user = JSON.parse(localStorage.getItem("user") || "{}");
     "subjectId": subject,
   }
 
-  console.log(value);
 
   const [qrValue, setQrValue] = useState(JSON.stringify(value));
 
@@ -27,6 +26,7 @@ const user = JSON.parse(localStorage.getItem("user") || "{}");
         ...value,
         "refreshedAt": new Date().toISOString(),
       };
+      console.log(newValue);
       setQrValue(JSON.stringify(newValue));
     }, 30000);
 
