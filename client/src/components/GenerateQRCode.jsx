@@ -33,6 +33,14 @@ const user = JSON.parse(localStorage.getItem("user") || "{}");
     return () => clearInterval(interval);
   }, []);
 
+  useEffect( ()=>{
+    const newvalue = {
+      ...value,
+      "subjectId": subject,
+    }
+    setQrValue(JSON.stringify(newvalue));
+  } , [subject]);
+
   useEffect (() => {
     axios.post("https://attendance-management-nine.vercel.app/getSubject", {facultyId: user?._id}, {withCredentials: true})
     .then((res) => {
