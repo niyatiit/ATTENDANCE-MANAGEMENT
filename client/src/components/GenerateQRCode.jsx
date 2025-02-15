@@ -8,7 +8,8 @@ function GenerateQRCode() {
 
   // Todo: Faculty authentication
 const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const [subject, setSubject] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+   const [subject, setSubject] = useState();
 
   const value = {
     "facultyId": user?._id || "Nahi hai",
@@ -35,6 +36,7 @@ const user = JSON.parse(localStorage.getItem("user") || "{}");
     axios.post("https://attendance-management-nine.vercel.app/getSubject", {facultyId: user?._id}, {withCredentials: true})
     .then((res) => {
       console.log(res);
+      setSubjects(res);
     })
     .catch ((error) => {
       console.log(error);
@@ -43,9 +45,18 @@ const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   return (
     <div style={{ background: 'white', padding: '16px' }}>
-      {
-        
-      }
+      <h2>Select a Subject</h2>
+      <select
+        value={subject}
+        onChange={(e) => setSubject(e.target.value)}
+      >
+        <option value="">-- Select Subject --</option>
+        {Object.entries(subjects).map(([code, name]) => (
+          <option key={code} value={code}>
+            {name}
+          </option>
+        ))}
+      </select>
       {
         subject.length > 0 && 
         <QRCode 
