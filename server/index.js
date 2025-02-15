@@ -39,8 +39,7 @@ app.post("/generate-qr", async (req, res) => {
 
 app.post("/getSubject", async (req, res) => {
   const { facultyId } = req.body;
-  console.log(facultyId);
-  const subjects  = await Subject.find({faculty : new mongoose.Types.ObjectId(facultyId)});
+  const subjects  = await Subject.find({faculty : facultyId});
 
   if(subjects.length === 0)
   {
