@@ -90,13 +90,11 @@ app.post("/getSubject", async (req, res) => {
 
 app.post("/mark-attendance", async (req, res) => {
   try {
-    const { studentId, qrData } = req.body;
-
-    if (!studentId || !qrData) {
-      return res.status(400).json({ error: "Missing studentId or QR data" });
-    }
-
-    const { facultyId, refreshedAt, subjectId } = qrData; // ✅ Fix: Use correct data
+    const { studentId, facultyId, subjectId, refreshedAt } = req.body;
+    // if (!studentId || !qrData) {
+    //   return res.status(400).json({ error: "Missing studentId or QR data" });
+    // }
+// ✅ Fix: Use correct data
     if (!facultyId || !refreshedAt || !subjectId) {
       return res.status(400).json({ error: "Invalid QR data" });
     }
