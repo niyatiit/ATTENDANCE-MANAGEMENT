@@ -16,16 +16,7 @@ const attendanceSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Subject",
       required: true,
-    },
-    sessionId: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    timestamp: {
-      type: Date,
-      default: Date.now,
-    },
+    }
   },
   {
     timestamps: true,
