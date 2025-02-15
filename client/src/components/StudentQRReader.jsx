@@ -33,13 +33,15 @@ function StudentQRReader() {
 
   useEffect(() => {
     const studentId = localStorage.getItem("user")._id;
-    axios.post("https://attendance-management-nine.vercel.app/mark-attendance", {studentId, qrData: qrValue})
+    if(studentId && scanResult?.facultyId && scanResult?.subjectId && scanResult?.refreshedAt){
+    axios.post("https://attendance-management-nine.vercel.app/mark-attendance", {studentId, qrData: scanResult})
     .then((res) => {
        alert(res.data); 
     })
     .catch (err => {
       alert(err);
     })
+    }
   }, [scanResult])
 
   return (
