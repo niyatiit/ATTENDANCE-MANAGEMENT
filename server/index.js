@@ -37,10 +37,6 @@ app.post("/generate-qr", async (req, res) => {
   });
 });
 
-
-
-const Subject = require("./models/Subject"); // Ensure correct path to Subject model
-
 const app = express();
 app.use(express.json()); // Middleware to parse JSON
 
