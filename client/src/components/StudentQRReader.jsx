@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Html5QrcodeScanner } from "html5-qrcode";
+import axios from 'axios';
 
 function StudentQRReader() {
   const [scanResult, setScanResult] = useState("");
@@ -31,9 +32,14 @@ function StudentQRReader() {
   }, []);
 
   useEffect(() => {
-    const studentId = localStorage.getItem("user");
-    alert(scanResult);
-    alert(studentId);
+    const studentId = localStorage.getItem("user")._id;
+    axios.post("https://attendance-management-nine.vercel.app/mark-attendance", {studentId, qrData: qrValue})
+    .then((res) => {
+       alert(res.data); 
+    })
+    .catch (err => {
+      alert(err);
+    })
   }, [scanResult])
 
   return (
