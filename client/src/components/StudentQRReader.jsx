@@ -48,7 +48,8 @@ useEffect(() => {
       if (parsedData.facultyId && parsedData.subjectId && parsedData.refreshedAt) {
         axios.post("https://attendance-management-nine.vercel.app/mark-attendance", {
           studentId, // ✅ Now studentId is correctly included
-          qrData: parsedData, // ✅ Send the parsed QR data
+          // qrData: parsedData, // ✅ Send the parsed QR data
+          ...qrData,
         })
         .then((res) => {
           alert(res.data.message);
