@@ -17,7 +17,11 @@ function Login() {
       .post("https://attendance-management-nine.vercel.app/login", data, { withCredentials: true })
       .then((res) => {
         localStorage.setItem("user", JSON.stringify(res.data.user));
-        navigate("/faculty");
+        if ('facultyId' in user) {
+          navigate("/faculty");
+        } else {
+          navigate("/student");
+        }
       })
       .catch((err) => {
         console.log(err);
