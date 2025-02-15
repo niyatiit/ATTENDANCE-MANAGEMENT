@@ -56,11 +56,11 @@ app.post("/getSubject", async (req, res) => {
     // const facultyObjectId = new mongoose.Types.ObjectId(facultyId);
 
     // Step 3: Fetch subjects from database
-    const subjects = await Subject.find({faculty : facultyId});
+    const subjects = await Subject.find({faculty :new mongoose.Types.ObjectId(facultyId)});
 
     // Step 4: Check if subjects exist
     if (!subjects || subjects.length === 0) {
-      return res.status(404).json({ msg: "No subjects found for this Faculty ID" });
+      return res.status(404).json({ msg: "No subjects found for this Faculty ID"  , facultyId});
     }
 
     // Step 5: Return the subjects
