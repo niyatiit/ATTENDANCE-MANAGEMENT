@@ -58,7 +58,7 @@ const user = JSON.parse(localStorage.getItem("user") || "{}");
         ))}
       </select>
       {
-        subject.length > 0 && 
+        subject && 
         <QRCode 
           size={256}
           style={{ height: "500px", maxWidth: "100%", width: "100%" }}
