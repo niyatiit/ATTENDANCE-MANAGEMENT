@@ -13,6 +13,8 @@ const user = JSON.parse(localStorage.getItem("user") || "{}");
     "date": new Date().toISOString(),
   }
 
+  console.log(value);
+
   const [qrValue, setQrValue] = useState(JSON.stringify(value));
 
   useEffect(() => {
