@@ -38,8 +38,7 @@ app.post("/generate-qr", async (req, res) => {
 });
 
 
-const express = require("express");
-const mongoose = require("mongoose");
+
 const Subject = require("./models/Subject"); // Ensure correct path to Subject model
 
 const app = express();
