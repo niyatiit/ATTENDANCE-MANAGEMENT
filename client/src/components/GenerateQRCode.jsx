@@ -27,7 +27,7 @@ function GenerateQRCode() {
     if (subject) {
       const newValue = {
         facultyId: user?._id || "Nahi hai",
-        date: new Date().toISOString(),
+        // date: new Date().toISOString(),
         subjectId: subject,
         refreshedAt: new Date().toISOString(),
       };
