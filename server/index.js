@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(cookieParser());
 // Enable CORS for your React app (adjust origin as needed)
 app.use(cors({
-  origin: 'http://localhost:5173', // e.g., React dev server port
+  origin: 'https://attendance-management-nine.vercel.app/', // e.g., React dev server port
   credentials: true,
 }));
 const port = 3000;
