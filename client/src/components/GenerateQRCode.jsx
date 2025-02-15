@@ -45,18 +45,19 @@ const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   return (
     <div style={{ background: 'white', padding: '16px' }}>
-      <h2>Select a Subject</h2>
-      <select
-        value={subject}
-        onChange={(e) => setSubject(e.target.value)}
-      >
-        <option value="">-- Select Subject --</option>
-        {Object.entries(subjects).map(([code, name]) => (
-          <option key={code} value={code}>
-            {name}
-          </option>
-        ))}
-      </select>
+                  <h2>Select a Subject</h2>
+                  <select
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+            >
+              <option value="">-- Select Subject --</option>
+              {subjects?.data?.map((sub) => (
+                <option key={sub._id} value={sub._id}>
+                  {sub.name}
+                </option>
+              ))}
+          </select>
+
       {
         subject && 
         <QRCode 
