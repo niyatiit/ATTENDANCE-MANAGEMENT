@@ -51,11 +51,16 @@ const user = JSON.parse(localStorage.getItem("user") || "{}");
               onChange={(e) => setSubject(e.target.value)}
             >
               <option value="">-- Select Subject --</option>
-              {subjects?.data?.map((sub) => (
-                <option key={sub._id} value={sub._id}>
-                  {sub.name}
-                </option>
-              ))}
+              {subjects?.data?.map((sub) => {
+                if (sub.faculty === user._id) {
+                  return <option key={sub._id} value={sub._id}>
+                    {sub.name}
+                  </option>
+                }
+                else {
+                  return null;
+                }
+              })}
           </select>
 
       {
