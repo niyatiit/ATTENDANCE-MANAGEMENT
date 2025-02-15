@@ -6,12 +6,14 @@ import { useState, useEffect } from "react";
 function GenerateQRCode() {
 
   // Todo: Faculty authentication
-	const value = {
-    "facultyId": localStorage.getItem("user")?._id,
-    "date": new Date().toISOString(),
-  }
+const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-  const [qrValue, setQrValue] = useState(JSON.stringify(value));
+  const [qrValue, setQrValue] = useState(
+    JSON.stringify({
+      facultyId: user?._id || "N/A", // Use user._id properly
+      date: new Date().toISOString(),
+    })
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
