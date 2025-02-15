@@ -24,21 +24,11 @@ const router = createBrowserRouter([
         children: [
           {
             path: 'faculty/',
-            children: [
-              {
-                path: 'generate-qr-code/',
-                element: <GenerateQRCode />
-              }
-            ]
+            element: <GenerateQRCode />
           },
           {
             path: 'student/',
-            children: [
-              {
-                path: 'qr-reader/',
-                element: <StudentQRReader />
-              }
-            ]
+            element: <StudentQRReader />
           }
         ]
       },
