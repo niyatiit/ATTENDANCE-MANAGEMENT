@@ -14,6 +14,7 @@ const user = JSON.parse(localStorage.getItem("user") || "{}");
   const value = {
     "facultyId": user?._id || "Nahi hai",
     "date": new Date().toISOString(),
+    "subjectId": subject,
   }
 
   console.log(value);
