@@ -76,16 +76,45 @@ app.post("/getSubject", async (req, res) => {
 
 
 
+// app.post("/mark-attendance", async (req, res) => {
+//   const { studentId, qrData } = req.body;
+//   const { facultyId, refreshedAt, subjectId } = qrData;
+//   if (Date.now() - refreshedAt > 30000) {
+//     return res.status(400).send({ error: "QR code expired" });
+//   }
+//   const attendance = new Attendance({ studentId, subjectId , facultyId });
+//   await attendance.save();
+//   res.send({ message: "Attendance marked successfully" });
+// });
+
+
 app.post("/mark-attendance", async (req, res) => {
-  const { studentId, qrData } = req.body;
-  const { facultyId, refreshedAt, subjectId } = qrData;
-  if (Date.now() - refreshedAt > 30000) {
-    return res.status(400).send({ error: "QR code expired" });
+  try {
+    const { studentId, qrData } = req.body;
+
+    if (!studentId || !qrData) {
+      return res.status(400).json({ error: "Missing studentId or QR data" });
+    }
+
+    const { facultyId, refreshedAt, subjectId } = qrData; // ✅ Fix: Use correct data
+    if (!facultyId || !refreshedAt || !subjectId) {
+      return res.status(400).json({ error: "Invalid QR data" });
+    }
+
+    if (Date.now() - new Date(refreshedAt).getTime() > 30000) { 
+      return res.status(400).send({ error: "QR code expired" });
+    }
+
+    const attendance = new Attendance({ studentId, facultyId, subjectId }); // ✅ Fix: Save correct data
+    await attendance.save();
+
+    res.status(200).json({ message: "Attendance marked successfully" });
+  } catch (error) {
+    console.error("Error in mark-attendance:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
-  const attendance = new Attendance({ studentId, subjectId , facultyId });
-  await attendance.save();
-  res.send({ message: "Attendance marked successfully" });
 });
+
 app.post("/register", async (req, res) => {
     try {
         let { username, email, password } = req.body;
