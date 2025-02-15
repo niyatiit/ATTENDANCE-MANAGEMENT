@@ -38,31 +38,49 @@ app.post("/generate-qr", async (req, res) => {
 });
 
 
+const express = require("express");
+const mongoose = require("mongoose");
+const Subject = require("./models/Subject"); // Ensure correct path to Subject model
+
+const app = express();
+app.use(express.json()); // Middleware to parse JSON
+
 app.post("/getSubject", async (req, res) => {
   try {
     const { facultyId } = req.body;
 
-    // Check if facultyId is provided
+    // Step 1: Check if facultyId is provided
     if (!facultyId) {
       return res.status(400).json({ msg: "Faculty ID is required" });
     }
 
-    // Convert facultyId to ObjectId
+    // Step 2: Convert facultyId to ObjectId only if it's a valid MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(facultyId)) {
+      return res.status(400).json({ msg: "Invalid Faculty ID format" });
+    }
+    
     const facultyObjectId = new mongoose.Types.ObjectId(facultyId);
 
-    // Query the database
+    // Step 3: Fetch subjects from database
     const subjects = await Subject.find({ faculty: facultyObjectId });
 
-    if (subjects.length === 0) {
-      return res.status(404).json({ msg: "No subjects found", facultyId });
+    // Step 4: Check if subjects exist
+    if (!subjects || subjects.length === 0) {
+      return res.status(404).json({ msg: "No subjects found for this Faculty ID" });
     }
 
+    // Step 5: Return the subjects
     return res.status(200).json(subjects);
+    
   } catch (error) {
     console.error("Error fetching subjects:", error);
     return res.status(500).json({ msg: "Internal server error", error: error.message });
   }
 });
+
+// Start Express server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 
 app.post("/mark-attendance", async (req, res) => {
