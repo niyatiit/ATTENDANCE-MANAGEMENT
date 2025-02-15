@@ -78,11 +78,11 @@ app.post("/getSubject", async (req, res) => {
 
 app.post("/mark-attendance", async (req, res) => {
   const { studentId, qrData } = req.body;
-  const { facultyId, refreshedAt } = JSON.parse(qrData);
+  const { facultyId, refreshedAt, subjectId } = JSON.parse(qrData);
   if (Date.now() - refreshedAt > 30000) {
     return res.status(400).send({ error: "QR code expired" });
   }
-  const attendance = new Attendance({ studentId, sessionId });
+  const attendance = new Attendance({ studentId, subjectId , facultyId });
   await attendance.save();
   res.send({ message: "Attendance marked successfully" });
 });
