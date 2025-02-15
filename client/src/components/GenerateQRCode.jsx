@@ -33,13 +33,28 @@ const user = JSON.parse(localStorage.getItem("user") || "{}");
     return () => clearInterval(interval);
   }, []);
 
-  useEffect( ()=>{
-    const newvalue = {
-      ...value,
-      "subjectId": subject,
-    }
-    setQrValue(JSON.stringify(newvalue));
-  } , [subject]);
+ useEffect(() => {
+  if (subject) {
+    const newValue = {
+      facultyId: user?._id || "Nahi hai",
+      date: new Date().toISOString(),
+      subjectId: subject,  // Now subjectId is included properly
+    };
+    setQrValue(JSON.stringify(newValue));
+  }
+}, [subject]);
+  
+useEffect(() => {
+  if (subject) {
+    const newValue = {
+      facultyId: user?._id || "Nahi hai",
+      date: new Date().toISOString(),
+      subjectId: subject,  // Now subjectId is included properly
+    };
+    setQrValue(JSON.stringify(newValue));
+  }
+}, [subject]);
+
 
   useEffect (() => {
     axios.post("https://attendance-management-nine.vercel.app/getSubject", {facultyId: user?._id}, {withCredentials: true})
