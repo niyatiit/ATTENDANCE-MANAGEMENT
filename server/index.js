@@ -37,7 +37,7 @@ app.post("/getSubject", async (req, res) => {
     const { facultyId } = req.body;
     if (!facultyId) return res.status(400).json({ msg: "Faculty ID is required" });
 
-    const subjects = await Subject.find();
+    const subjects = await Subject.find({faculty : facultyId});
     if (!subjects || subjects.length === 0) {
       return res.status(404).json({ msg: "No subjects found" });
     }
