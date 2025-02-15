@@ -31,18 +31,32 @@ function StudentQRReader() {
     return () => scanner.clear(); // Cleanup on unmount
   }, []);
 
-  useEffect(() => {
-    const studentId = localStorage.getItem("user")._id;
-    if(studentId && scanResult?.facultyId && scanResult?.subjectId && scanResult?.refreshedAt){
-    axios.post("https://attendance-management-nine.vercel.app/mark-attendance", {studentId, qrData: scanResult})
-    .then((res) => {
-       alert(res.data); 
-    })
-    .catch (err => {
-      alert(err);
-    })
+useEffect(() => {
+  if (scanResult) {
+    try {
+      const parsedData = JSON.parse(scanResult); // ✅ Parse scanned string to JSON
+      console.log("Parsed QR Data:", parsedData);
+
+      const studentId = JSON.parse(localStorage.getItem("user"))._id; // ✅ Properly get studentId
+
+      if (studentId && parsedData.facultyId && parsedData.subjectId && parsedData.refreshedAt) {
+        axios.post("https://attendance-management-nine.vercel.app/mark-attendance", {
+          studentId,
+          qrData: parsedData, // ✅ Send the parsed object
+        })
+        .then((res) => {
+          alert(res.data.message);
+        })
+        .catch((err) => {
+          alert(err.response?.data?.error || "Error marking attendance");
+        });
+      }
+    } catch (error) {
+      console.error("QR Data Parsing Error:", error);
     }
-  }, [scanResult])
+  }
+}, [scanResult]);
+
 
   return (
     <div>
