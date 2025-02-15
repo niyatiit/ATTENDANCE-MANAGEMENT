@@ -39,8 +39,8 @@ app.post("/generate-qr", async (req, res) => {
 
 app.post("/mark-attendance", async (req, res) => {
   const { studentId, qrData } = req.body;
-  const { sessionId, timestamp } = JSON.parse(qrData);
-  if (Date.now() - timestamp > 30000) {
+  const { facultyId, refreshedAt } = JSON.parse(qrData);
+  if (Date.now() - refreshedAt > 30000) {
     return res.status(400).send({ error: "QR code expired" });
   }
   const attendance = new Attendance({ studentId, sessionId });
