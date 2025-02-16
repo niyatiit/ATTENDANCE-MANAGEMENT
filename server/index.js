@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(cors({
-  origin: 'https://magenta-souffle-b73880.netlify.app', 
+  origin: 'https://keen-elf-718b89.netlify.app', 
   credentials: true,
 }));
 const port = 3000;
