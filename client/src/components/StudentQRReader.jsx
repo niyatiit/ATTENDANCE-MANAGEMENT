@@ -6,7 +6,6 @@ function StudentQRReader() {
   const [scanResult, setScanResult] = useState("");
 
   useEffect(() => {
-    
     const scanner = new Html5QrcodeScanner(
       "reader",
       {
@@ -32,10 +31,11 @@ function StudentQRReader() {
     return () => scanner.clear(); // Cleanup on unmount
   }, []);
 
-useEffect(() => {
-  console.log("here");
+  useEffect(() => {
+    if (!scanResult) return; // ✅ Prevent running when scanResult is empty
+
     try {
-      const parsedData = scanResult; // ✅ Parse scanned QR data
+      const parsedData = JSON.parse(scanResult); // ✅ Correctly parse QR data
       console.log("Parsed QR Data:", parsedData);
 
       const user = JSON.parse(localStorage.getItem("user")); // ✅ Get student info
@@ -49,24 +49,23 @@ useEffect(() => {
       if (parsedData.facultyId && parsedData.subjectId && parsedData.refreshedAt) {
         axios.post("https://attendance-management-nine.vercel.app/mark-attendance", {
           studentId, // ✅ Now studentId is correctly included
-          // qrData: parsedData, // ✅ Send the parsed QR data
-          ...qrData,
+          qrData: parsedData, // ✅ Send the parsed QR data
         })
         .then((res) => {
           alert(res.data.message);
+          console.log("✅ Attendance marked successfully:", res.data);
         })
         .catch((err) => {
+          console.error("❌ Error marking attendance:", err.response?.data?.error || err);
           alert(err.response?.data?.error || "Error marking attendance");
         });
       } else {
-        console.error("Incomplete QR data received:", parsedData);
+        console.error("❌ Incomplete QR data received:", parsedData);
       }
     } catch (error) {
-      console.error("QR Data Parsing Error:", error);
+      console.error("❌ QR Data Parsing Error:", error);
     }
-}, [scanResult, setScanResult]);
-
-
+  }, [scanResult]);
 
   return (
     <div>
