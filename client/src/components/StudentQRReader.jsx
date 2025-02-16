@@ -95,7 +95,6 @@ function StudentQRReader() {
 
   return (
     <div>
-      <h3>Scan QR Code</h3>
       {scanResult ? (
         <button onClick={handleSubmit}>✅</button>
       ) : (
