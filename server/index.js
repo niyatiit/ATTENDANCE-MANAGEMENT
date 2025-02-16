@@ -6,9 +6,9 @@ const cors = require("cors");
 app.use(express.json());
 
 app.use(cookieParser());
-// Enable CORS for your React app (adjust origin as needed)
+
 app.use(cors({
-  origin: 'https://cosmic-kashata-499ea3.netlify.app', // e.g., React dev server port
+  origin: 'http://localhost:5173', 
   credentials: true,
 }));
 const port = 3000;
@@ -27,17 +27,16 @@ catch(err){
 app.get("/", (req, res) => {
   res.send("backend server is running");
 });
-app.post("/generate-qr", async (req, res) => {
-  const { facultyId } = req.body;
-  const sessionId = uuidv4();
-  const payload = { sessionId, timestamp: Date.now() };
-  qrcode.toDataURL(JSON.stringify(payload), (err, url) => {
-    if (err) return res.status(500).send({ error: "Error generating QR" });
-    res.send({ qrCode: url, sessionId });
-  });
-});
+// app.post("/generate-qr", async (req, res) => {
+//   const { facultyId } = req.body;
+//   const sessionId = uuidv4();
+//   const payload = { sessionId, timestamp: Date.now() };
+//   qrcode.toDataURL(JSON.stringify(payload), (err, url) => {
+//     if (err) return res.status(500).send({ error: "Error generating QR" });
+//     res.send({ qrCode: url, sessionId });
+//   });
+// });
 
-// Middleware to parse JSON
 
 app.post("/getSubject", async (req, res) => {
   try {
@@ -71,22 +70,6 @@ app.post("/getSubject", async (req, res) => {
     return res.status(500).json({ msg: "Internal server error", error: error.message });
   }
 });
-
-// Start Express server
-
-
-
-// app.post("/mark-attendance", async (req, res) => {
-//   const { studentId, qrData } = req.body;
-//   const { facultyId, refreshedAt, subjectId } = qrData;
-//   if (Date.now() - refreshedAt > 30000) {
-//     return res.status(400).send({ error: "QR code expired" });
-//   }
-//   const attendance = new Attendance({ studentId, subjectId , facultyId });
-//   await attendance.save();
-//   res.send({ message: "Attendance marked successfully" });
-// });
-
 
 app.post("/mark-attendance", async (req, res) => {
   try {
@@ -219,6 +202,34 @@ app.get("/logout", (req, res) => {
 
 //   res.send({ token, role });
 // });
+
+app.post('/getAttendance', async (req, res) => {
+  const { facultyId } = req.body;
+
+try {
+  // Get all subjects
+  const allSubjects = await Subject.find();
+  
+  // Filter subjects manually
+  const subjects = allSubjects.filter(subject => subject.faculty.toString() === facultyId);
+
+  console.log(subjects);
+
+  const result = await Promise.all(
+    subjects.map(async (subject) => {
+      const cnt = await Attendance.countDocuments({ subjectId: subject._id });
+      return { subjectId: subject.name, count: cnt };
+    })
+  );
+
+  return res.status(200).json({ result });
+} catch (error) {
+  console.log(error);
+  throw error;
+}
+
+})
+
 app.listen(port, (req, res) => {
   console.log("listening on", port);
 });
