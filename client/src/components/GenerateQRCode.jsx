@@ -10,7 +10,7 @@ function GenerateQRCode() {
   const [qrValue, setQrValue] = useState("");
 
   useEffect(() => {
-    axios.post("https://attendance-management-nine.vercel.app/getSubject", 
+    axios.post("https://attendance-management-u6d5.onrender.com/getSubject", 
       { facultyId: user?._id }, 
       { withCredentials: true }
     )
