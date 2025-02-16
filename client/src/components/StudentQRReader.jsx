@@ -6,6 +6,7 @@ function StudentQRReader() {
   const [scanResult, setScanResult] = useState("");
 
   useEffect(() => {
+    console.log("here");
     const scanner = new Html5QrcodeScanner(
       "reader",
       {
