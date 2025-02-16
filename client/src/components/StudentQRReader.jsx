@@ -32,9 +32,8 @@ function StudentQRReader() {
   }, []);
 
 useEffect(() => {
-  if (scanResult) {
     try {
-      const parsedData = JSON.parse(scanResult); // ✅ Parse scanned QR data
+      const parsedData = scanResult; // ✅ Parse scanned QR data
       console.log("Parsed QR Data:", parsedData);
 
       const user = JSON.parse(localStorage.getItem("user")); // ✅ Get student info
@@ -63,7 +62,6 @@ useEffect(() => {
     } catch (error) {
       console.error("QR Data Parsing Error:", error);
     }
-  }
 }, [scanResult]);
 
 
