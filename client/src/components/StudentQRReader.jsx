@@ -32,6 +32,7 @@ function StudentQRReader() {
   }, []);
 
   useEffect(() => {
+    console.log("here");
     if (!scanResult) return; // ✅ Prevent running when scanResult is empty
 
     try {
@@ -65,7 +66,7 @@ function StudentQRReader() {
     } catch (error) {
       console.error("❌ QR Data Parsing Error:", error);
     }
-  }, [scanResult]);
+  }, []);
 
   return (
     <div>
