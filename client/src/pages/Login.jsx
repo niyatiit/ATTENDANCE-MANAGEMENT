@@ -14,7 +14,7 @@ function Login() {
     data.role = role;
 
     axios
-      .post("https://attendance-management-u6d5.onrender.com//login", data, { withCredentials: true })
+      .post("https://attendance-management-u6d5.onrender.com/login", data, { withCredentials: true })
       .then((res) => {
         localStorage.setItem("user", JSON.stringify(res.data.user));
         const user = JSON.parse(localStorage.getItem("user"));
