@@ -96,7 +96,7 @@ function StudentQRReader() {
   return (
     <div>
       {scanResult ? (
-        <button onClick={handleSubmit}>✅</button>
+        <button onClick={handleSubmit}>Sumbit Attendance</button>
       ) : (
         <div id="reader" style={{ width: "300px", height: "300px" }}></div>
       )}
