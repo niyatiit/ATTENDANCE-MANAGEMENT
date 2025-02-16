@@ -6,7 +6,7 @@ function StudentQRReader() {
   const [scanResult, setScanResult] = useState("");
 
   useEffect(() => {
-    console.log("here");
+    
     const scanner = new Html5QrcodeScanner(
       "reader",
       {
@@ -33,6 +33,7 @@ function StudentQRReader() {
   }, []);
 
 useEffect(() => {
+  console.log("here");
     try {
       const parsedData = scanResult; // ✅ Parse scanned QR data
       console.log("Parsed QR Data:", parsedData);
