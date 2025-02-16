@@ -79,7 +79,7 @@ function StudentQRReader() {
     const studentId = user._id; 
     const parsedData = JSON.parse(scanResult);
     
-    axios.post("https://attendance-management-nine.vercel.app/mark-attendance", {
+    axios.post("https://attendance-management-u6d5.onrender.com/mark-attendance", {
         studentId, // ✅ Now studentId is correctly included
         ...parsedData, // ✅ Send the parsed QR data
       })
