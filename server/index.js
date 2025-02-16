@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(cookieParser());
 // Enable CORS for your React app (adjust origin as needed)
 app.use(cors({
-  origin: 'https://cosmic-kashata-499ea3.netlify.app/', // e.g., React dev server port
+  origin: 'https://cosmic-kashata-499ea3.netlify.app', // e.g., React dev server port
   credentials: true,
 }));
 const port = 3000;
