@@ -64,7 +64,7 @@ useEffect(() => {
     } catch (error) {
       console.error("QR Data Parsing Error:", error);
     }
-}, [scanResult]);
+}, [scanResult, setScanResult]);
 
 
 
